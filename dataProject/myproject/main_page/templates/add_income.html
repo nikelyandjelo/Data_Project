@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Add Income</h1>
+<form method="post">
+    {% csrf_token %}
+    <p>
+        <label for="{{ form.date.id_for_label }}">Date:</label>
+        {{ form.date }}
+    </p>
+    <p>
+        <label for="{{ form.amount.id_for_label }}">Amount:</label>
+        {{ form.amount }}
+    </p>
+    <p>
+        <label for="{{ form.description.id_for_label }}">Description:</label>
+        {{ form.description }}
+    </p>
+    <p>
+        <label for="{{ form.income_payment_method.id_for_label }}">Income Payment Method:</label>
+        {{ form.income_payment_method }}
+    </p>
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
