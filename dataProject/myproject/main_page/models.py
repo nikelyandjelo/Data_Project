@@ -1,38 +1,29 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class PaymentMethod(models.Model):
-  name = models.CharField(max_length=50)
+CURRENCY_CHOICES = [
+  ('USD', 'USD'),
+  ('EUR', 'EUR'),
+  ('GBP', 'GBP'),
+]
 
-class IncomePaymentMethod(models.Model):
-  name = models.CharField(max_length=50)
-
-class Location(models.Model):
-  name = models.CharField(max_length=50)
-
-
-PAYMENT_CHOICES = [ ('cash', 'cash'),   
-                    ('credit', 'credit card'),  
-                    ('debit', 'debit card'),  
-                    ('bank_transfer', 'bank transfer'),]
-
-PAYMENT_CHOICES_INCOME = [ ('cash', 'cash'), 
-                          ('card', 'card')]
-
-LOCATION_CHOICES =[ ('canada', 'canada'),
-                    ('usa', 'usa'), 
-                    ('europe', 'europe')]
-
+PAYMENT_METHOD_CHOICES = [
+  ('Cash', 'Cash'),
+  ('Credit Card', 'Credit Card'),
+  ('Bank Transfer', 'Bank Transfer'),
+]
 class Income(models.Model):
-  date = models.DateField()
+  user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+  date = models.DateField(auto_now_add=True,max_length=50)
   amount = models.DecimalField(max_digits=10, decimal_places=2)
-  description = models.CharField(max_length=100)
-  income_payment_method = models.ForeignKey(IncomePaymentMethod, on_delete=models.CASCADE, choices=PAYMENT_CHOICES_INCOME)
-  
+  description = models.TextField()
+  currency = models.CharField(max_length=50,default='',choices=CURRENCY_CHOICES)
 
 class Expense(models.Model):
-  date = models.DateField()
+  user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+  date = models.DateField(auto_now_add=True)
   amount = models.DecimalField(max_digits=10, decimal_places=2)
-  description = models.CharField(max_length=100)
-  payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE,choices=PAYMENT_CHOICES)
-  location = models.ForeignKey(Location, on_delete=models.CASCADE, choices = LOCATION_CHOICES)
+  description = models.TextField(max_length=50)
+  currency = models.CharField(max_length=50,default='',choices=CURRENCY_CHOICES)
+  payment_method = models.CharField(max_length=50, choices=PAYMENT_METHOD_CHOICES)
 

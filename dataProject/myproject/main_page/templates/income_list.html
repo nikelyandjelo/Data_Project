@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Income List</title>
+</head>
+<body>
+    <h1>Income List</h1>
+    <ul>
+        {% for income in incomes %}
+            <li>{{ income.date }} - {{ income.amount }}</li>
+        {% empty %}
+            <li>No incomes available</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'finance:add_income' %}">Add Income</a>
+</body>
+</html>

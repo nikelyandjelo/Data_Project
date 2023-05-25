@@ -1,16 +1,13 @@
 from django import forms
-from .models import Income
-from .models import Expense
+from .models import Income, Expense
 
 class IncomeForm(forms.ModelForm):
     class Meta:
         model = Income
-        fields = ('date', 'amount', 'description','income_payment_method')
+        fields = [ 'amount', 'description', 'currency']
 
 class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expense
-        fields = ('date', 'amount', 'description','payment_method','location')
-
-
+        fields = [ 'amount',  'description', 'currency', 'payment_method']
 

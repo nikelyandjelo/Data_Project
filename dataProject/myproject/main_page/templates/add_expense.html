@@ -1,29 +1,15 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Expense</title>
+</head>
+<body>
+    <h1>Add Expense</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add</button>
+    </form>
+</body>
+</html>
 
-{% block content %}
-<h1>Add Expense</h1>
-<form method="post">
-    {% csrf_token %}
-       <p>
-        <label for="{{ form.date.id_for_label }}">Date:</label>
-        {{ form.date }}
-    </p>
-    <p>
-        <label for="{{ form.amount.id_for_label }}">Amount:</label>
-        {{ form.amount }}
-    </p>
-    <p>
-        <label for="{{ form.description.id_for_label }}">Description:</label>
-        {{ form.description }}
-    </p>
-    <p>
-        <label for="{{ form.payment_method.id_for_label }}">Payment Method:</label>
-        {{ form.payment_method }}
-    </p>
-     <p>
-        <label for="{{ form.location.id_for_label }}">Location:</label>
-        {{ form.location }}
-    </p>
-    <button type="submit">Submit</button>
-</form>
-{% endblock %}
