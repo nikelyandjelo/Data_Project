@@ -5,13 +5,28 @@
 </head>
 <body>
     <h1>Income List</h1>
-    <ul>
-        {% for income in incomes %}
-            <li>{{ income.date }} - {{ income.amount }}</li>
-        {% empty %}
-            <li>No incomes available</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'finance:add_income' %}">Add Income</a>
+       <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Currency</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for income in incomes %}
+                <tr>
+                    <td>{{ income.date }}</td>
+                    <td>{{ income.amount }}</td>
+                    <td>{{ income.currency }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No incomes available</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    <a href="{% url 'add_income' %}">Add Income</a>
 </body>
 </html>

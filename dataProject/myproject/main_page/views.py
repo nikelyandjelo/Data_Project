@@ -19,7 +19,7 @@ def add_income(request):
         form = IncomeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home.html')
+            return redirect('home')
     else:
         form = IncomeForm()
     return render(request, 'add_income.html', {'form': form})
@@ -29,7 +29,7 @@ def add_expense(request):
         form = ExpenseForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home.html')
+            return redirect('home')
     else:
         form = ExpenseForm()
     return render(request, 'add_expense.html', {'form': form})

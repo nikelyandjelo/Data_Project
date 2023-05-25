@@ -5,13 +5,30 @@
 </head>
 <body>
     <h1>Expense List</h1>
-    <ul>
-        {% for expense in expenses %}
-            <li>{{ expense.date }} - {{ expense.amount }}</li>
-        {% empty %}
-            <li>No expenses available</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'finance:add_expense' %}">Add Expense</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Currency</th>
+                <th>Payment Method</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.date }}</td>
+                    <td>{{ expense.amount }}</td>
+                    <td>{{ expense.currency }}</td>
+                    <td>{{ expense.payment_method }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No expenses available</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    <a href="{% url 'add_expense' %}">Add Expense</a>
 </body>
 </html>
