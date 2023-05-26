@@ -2,6 +2,9 @@
 <html>
 <head>
     <title>Expense List</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
 <body>
     <h1>Expense List</h1>
@@ -29,6 +32,7 @@
             {% endfor %}
         </tbody>
         </table>
-    <a href="{% url 'add_expense' %}">Add Expense</a>
+    <a class = "btn btn-primary " href="{% url 'add_expense' %}">Add Expense</a>
+    <a class = "btn btn-primary " href="{% url 'home' %}">Back</a>
 </body>
 </html>

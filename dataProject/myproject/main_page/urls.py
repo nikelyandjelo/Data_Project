@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 from registration.views import register,login_view
 from django.contrib.auth import views as auth_views
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('income/', views.income_list, name='income_list'),
@@ -13,4 +14,6 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('home/', views.home_view, name='home'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('graph_income/', views.graph_income, name='graph_income'),
 ]
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

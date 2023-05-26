@@ -2,6 +2,9 @@
 <html>
 <head>
     <title>Income List</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
 <body>
     <h1>Income List</h1>
@@ -27,6 +30,7 @@
             {% endfor %}
         </tbody>
         </table>
-    <a href="{% url 'add_income' %}">Add Income</a>
+    <a class = "btn btn-primary " href="{% url 'add_income' %}">Add Income</a>
+    <a class = "btn btn-primary " href="{% url 'home' %}">Back</a>
 </body>
 </html>
