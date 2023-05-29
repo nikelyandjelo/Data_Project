@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import csv
 import os 
+import warnings
+
+warnings.filterwarnings("ignore", category=UserWarning)
 
 def convert_to_csv(data, fieldnames):
     filename = 'data.csv'
@@ -45,6 +48,43 @@ def graph_income(request):
 
     context = {'csv_filename': csv_filename, 'graph_filename': graph_filename}
     return render(request, 'graph_income.html', context)
+
+def graph_expense(request):
+    expenses = Expense.objects.all()
+    fieldnames = ['date', 'amount', 'currency', 'payment_method']
+    csv_filename = convert_to_csv(expenses, fieldnames)
+
+    df = pd.read_csv(csv_filename)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+
+    ax1.hist(df['amount'], bins=10)
+    ax1.set_xlabel('Amount')
+    ax1.set_ylabel('Frequency')
+    ax1.set_title('Expense Histogram')
+
+    graph_filename = os.path.join('static', 'expense_histogram.png')
+    plt.savefig(graph_filename)
+
+    payment_counts = df['payment_method'].value_counts()
+    ax2.bar(payment_counts.index, payment_counts.values)
+    ax2.set_xlabel('Payment Method')
+    ax2.set_ylabel('Count')
+    ax2.set_title('Expense Bar Chart by Payment Method')
+
+    graph_filename2 = os.path.join('static', 'expense_bar_chart.png')
+    plt.savefig(graph_filename2)
+
+    plt.tight_layout()
+    plt.close(fig)
+
+    context = {
+        'csv_filename': csv_filename,
+        'graph_filename': graph_filename,
+        'graph_filename2': graph_filename2
+    }
+    return render(request, 'graph_expense.html', context)
+
 
 def home_view(request):
     username = request.user.username

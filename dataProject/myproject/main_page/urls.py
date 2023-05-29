@@ -15,5 +15,6 @@ urlpatterns = [
     path('home/', views.home_view, name='home'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('graph_income/', views.graph_income, name='graph_income'),
+    path('graph_expense/', views.graph_expense, name='graph_expense'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

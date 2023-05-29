@@ -1,0 +1,6 @@
+date,amount,currency,payment_method
+2023-05-25,1234.00,GBP,Credit Card
+2022-10-28,2300.00,EUR,Bank Transfer
+2023-09-27,130.00,EUR,Cash
+2022-08-27,1900.00,GBP,Credit Card
+2022-08-08,1200.00,USD,Bank Transfer
