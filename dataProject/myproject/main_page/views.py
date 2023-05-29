@@ -56,7 +56,7 @@ def graph_expense(request):
 
     df = pd.read_csv(csv_filename)
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+    fig, ax1 = plt.subplots(figsize=(6, 6)) 
 
     ax1.hist(df['amount'], bins=10)
     ax1.set_xlabel('Amount')
@@ -65,7 +65,9 @@ def graph_expense(request):
 
     graph_filename = os.path.join('static', 'expense_histogram.png')
     plt.savefig(graph_filename)
+    plt.close(fig)
 
+    fig, ax2 = plt.subplots(figsize=(6, 6))
     payment_counts = df['payment_method'].value_counts()
     ax2.bar(payment_counts.index, payment_counts.values)
     ax2.set_xlabel('Payment Method')
