@@ -6,34 +6,33 @@ import pandas as pd
 import csv
 import os 
 
-def convert_to_csv(incomes):
-    filename = 'income_data.csv' 
-    fieldnames = ['Date', 'Amount', 'Currency'] 
+def convert_to_csv(data, fieldnames):
+    filename = 'data.csv'
 
     with open(filename, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-        writer.writeheader() 
+        writer.writeheader()
 
-        for income in incomes:
+        for item in data:
             writer.writerow({
-                'Date': income.date,
-                'Amount': income.amount,
-                'Currency': income.currency
+                fieldname: getattr(item, fieldname) for fieldname in fieldnames
             })
 
     return filename
 
 def graph_income(request):
     incomes = Income.objects.all()
-    csv_filename = convert_to_csv(incomes)
+    fieldnames = ['date', 'amount', 'currency'] 
+    csv_filename = convert_to_csv(incomes, fieldnames)
 
     df = pd.read_csv(csv_filename)
 
     fig, ax = plt.subplots()
-    df['Date'] = pd.to_datetime(df['Date'])
-    df.sort_values (by='Date', inplace=True)
-    ax.plot(df['Date'], df['Amount'])
+    fig.set_size_inches(13,6)
+    df['date'] = pd.to_datetime(df['date'])
+    df.sort_values (by='date', inplace=True)
+    ax.plot(df['date'], df['amount'])
 
     ax.set_xlabel('Date')
     ax.set_ylabel('Amount')
