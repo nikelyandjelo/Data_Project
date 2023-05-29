@@ -53,6 +53,11 @@ def home_view(request):
 
 def income_list(request):
     incomes = Income.objects.all()
+    if request.method == 'POST' and 'delete' in request.POST:
+        income_id =request.POST.get('delete')
+        income = Income.objects.get(id=income_id)
+        income.delete()
+        return redirect('income_list')
     return render(request, 'income_list.html', {'incomes': incomes})
 
 def expense_list(request):

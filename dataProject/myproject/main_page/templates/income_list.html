@@ -8,6 +8,8 @@
 </head>
 <body>
     <h1>Income List</h1>
+        <form method="POST" action="{% url 'income_list' %}">
+        {% csrf_token %}
        <table>
         <thead>
             <tr>
@@ -22,6 +24,9 @@
                     <td>{{ income.date }}</td>
                     <td>{{ income.amount }}</td>
                     <td>{{ income.currency }}</td>
+                    <td>
+                        <button type="submit" name="delete" value="{{ income.id }}" class="btn btn-danger">Delete</button>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
