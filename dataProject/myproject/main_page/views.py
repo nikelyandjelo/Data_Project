@@ -29,7 +29,7 @@ def graph_income(request):
 
     df = pd.read_csv(csv_filename)
 
-    fig, ax = plt.subplots(figsize = (6,6))
+    fig, ax = plt.subplots(figsize = (13,6))
 
     df['date'] = pd.to_datetime(df['date'])
     df.sort_values (by='date', inplace=True)
@@ -64,13 +64,27 @@ def graph_income(request):
             'graph_filename2': graph_filename2
         }
     return render(request, 'graph_income.html', context)
+def plot_histogram(data, field):
+    fig, ax = plt.subplots(figsize=(6, 6))
+
+    ax.hist(data[field], bins=10)
+    ax.set_xlabel(field.capitalize())
+    ax.set_ylabel('Frequency')
+    ax.set_title(f'{field.capitalize()} Histogram')
+
+    return fig
 
 def graph_expense(request):
     expenses = Expense.objects.all()
-    fieldnames = ['date', 'amount', 'currency', 'payment_method']
+    fieldnames = ['date', 'amount','description', 'currency', 'payment_method']
     csv_filename = convert_to_csv(expenses, fieldnames)
 
     df = pd.read_csv(csv_filename)
+    field_to_analyze = 'description'
+    fig = plot_histogram(df, field_to_analyze)
+    graph_filename = os.path.join('static', f'expense_{field_to_analyze}_histogram.png')
+    fig.savefig(graph_filename)
+    plt.close(fig)
 
     fig, ax1 = plt.subplots(figsize=(6, 6)) 
 
@@ -79,8 +93,8 @@ def graph_expense(request):
     ax1.set_ylabel('Frequency')
     ax1.set_title('Expense Histogram')
 
-    graph_filename = os.path.join('static', 'expense_histogram.png')
-    plt.savefig(graph_filename)
+    graph_filename1 = os.path.join('static', 'expense_histogram.png')
+    plt.savefig(graph_filename1)
     plt.tight_layout()
     plt.close(fig)
 
@@ -99,6 +113,7 @@ def graph_expense(request):
     context = {
         'csv_filename': csv_filename,
         'graph_filename': graph_filename,
+        'graph_filename1': graph_filename1,
         'graph_filename2': graph_filename2
     }
     return render(request, 'graph_expense.html', context)
