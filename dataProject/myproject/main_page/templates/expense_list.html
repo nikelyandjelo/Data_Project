@@ -8,6 +8,8 @@
 </head>
 <body>
     <h1>Expense List</h1>
+     <form method="POST" action="{% url 'expense_list' %}">
+        {% csrf_token %}
     <table>
         <thead>
             <tr>
@@ -24,6 +26,9 @@
                     <td>{{ expense.amount }}</td>
                     <td>{{ expense.currency }}</td>
                     <td>{{ expense.payment_method }}</td>
+                    <td>
+                        <button type="submit" name="delete" value="{{ expense.id }}" class="btn btn-danger">Delete</button>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>

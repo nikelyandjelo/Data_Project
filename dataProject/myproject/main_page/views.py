@@ -103,6 +103,11 @@ def income_list(request):
 
 def expense_list(request):
     expenses = Expense.objects.all()
+    if request.method == 'POST' and 'delete' in request.POST:
+        expense_id =request.POST.get('delete')
+        expense = Expense.objects.get(id=expense_id)
+        expense.delete()
+        return redirect('expense_list')
     return render(request, 'expense_list.html', {'expenses': expenses})
 
 def add_income(request):
