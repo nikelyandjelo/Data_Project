@@ -5,9 +5,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import csv
 import os 
-import warnings
-
-warnings.filterwarnings("ignore", category=UserWarning)
 
 def convert_to_csv(data, fieldnames):
     filename = 'data.csv'
@@ -26,13 +23,13 @@ def convert_to_csv(data, fieldnames):
 
 def graph_income(request):
     incomes = Income.objects.all()
-    fieldnames = ['date', 'amount', 'currency'] 
+    fieldnames = ['date', 'amount','description', 'currency'] 
     csv_filename = convert_to_csv(incomes, fieldnames)
 
     df = pd.read_csv(csv_filename)
 
-    fig, ax = plt.subplots()
-    fig.set_size_inches(13,6)
+    fig, ax = plt.subplots(figsize = (6,6))
+
     df['date'] = pd.to_datetime(df['date'])
     df.sort_values (by='date', inplace=True)
     ax.plot(df['date'], df['amount'])
@@ -43,10 +40,25 @@ def graph_income(request):
 
     graph_filename = os.path.join('static', 'income_graph.png')
     plt.savefig(graph_filename)
-
     plt.close(fig)
 
-    context = {'csv_filename': csv_filename, 'graph_filename': graph_filename}
+    fig, ax1 = plt.subplots(figsize = (6,6))
+
+    df['amount'] = df['amount'].astype(float)
+    labels = df['description'].tolist()
+
+    ax1.pie(df['amount'], labels=labels)
+    ax1.axis("equal")
+
+    graph_filename2 = os.path.join('static', 'income_equal.png')
+    plt.savefig(graph_filename2)
+    plt.close(fig)
+    
+    context = {
+            'csv_filename': csv_filename, 
+            'graph_filename': graph_filename,
+            'graph_filename2': graph_filename2
+        }
     return render(request, 'graph_income.html', context)
 
 def graph_expense(request):
@@ -65,6 +77,7 @@ def graph_expense(request):
 
     graph_filename = os.path.join('static', 'expense_histogram.png')
     plt.savefig(graph_filename)
+    plt.tight_layout()
     plt.close(fig)
 
     fig, ax2 = plt.subplots(figsize=(6, 6))
@@ -76,7 +89,6 @@ def graph_expense(request):
 
     graph_filename2 = os.path.join('static', 'expense_bar_chart.png')
     plt.savefig(graph_filename2)
-
     plt.tight_layout()
     plt.close(fig)
 
