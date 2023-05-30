@@ -16,7 +16,7 @@
                 <th>Date</th>
                 <th>Amount</th>
                 <th>Currency</th>
-                <th>Description</th>
+                <th>Category</th>
             </tr>
         </thead>
         <tbody>
@@ -25,7 +25,8 @@
                     <td>{{ income.date }}</td>
                     <td>{{ income.amount }}</td>
                     <td>{{ income.currency }}</td>
-                    <td>{{ income.description }}</td>
+                    <td>{{ income.category.name }}</td>
+              
                     <td>
                         <button type="submit" name="delete" value="{{ income.id }}" class="btn btn-danger">Delete</button>
                     </td>

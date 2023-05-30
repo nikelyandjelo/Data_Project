@@ -17,7 +17,7 @@
                 <th>Amount</th>
                 <th>Currency</th>
                 <th>Payment Method</th>
-                <th>Description</th>
+                <th>Category</th>
             </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
                     <td>{{ expense.amount }}</td>
                     <td>{{ expense.currency }}</td>
                     <td>{{ expense.payment_method }}</td>
-                    <td>{{ expense.description }}</td>
+                    <td>{{ expense.category }}</td>
                     <td>
                         <button type="submit" name="delete" value="{{ expense.id }}" class="btn btn-danger">Delete</button>
                     </td>
