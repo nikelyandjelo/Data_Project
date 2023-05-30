@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import csv
 import os 
+import numpy as np
 
 def convert_to_csv(data, fieldnames):
     filename = 'data.csv'
@@ -45,15 +46,18 @@ def graph_income(request):
     fig, ax1 = plt.subplots(figsize = (6,6))
 
     df['amount'] = df['amount'].astype(float)
-    labels = df['description'].tolist()
+    grouped_data = df.groupby('description')['amount'].sum()
 
-    ax1.pie(df['amount'], labels=labels)
+    labels = grouped_data.index.tolist()
+    amounts = grouped_data.tolist()
+
+    ax1.pie(amounts, labels=labels, autopct='%1.1f%%')
     ax1.axis("equal")
 
     graph_filename2 = os.path.join('static', 'income_equal.png')
     plt.savefig(graph_filename2)
     plt.close(fig)
-    
+
     context = {
             'csv_filename': csv_filename, 
             'graph_filename': graph_filename,
