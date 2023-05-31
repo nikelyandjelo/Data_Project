@@ -16,7 +16,9 @@ PAYMENT_METHOD_CHOICES = [
 class Category(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=50)
-
+    def __str__(self):
+        return self.name
+    
 class Income(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
   date = models.DateField(max_length=50)

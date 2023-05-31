@@ -66,7 +66,6 @@ def graph_expense(request):
     df = pd.read_csv(csv_filename)
 
     #hist for category
-    
     fig = plot_histogram(df,'category') 
     graph_filename = os.path.join('static', f'expense_category_histogram.png')
     plt.savefig(graph_filename)
@@ -132,7 +131,11 @@ def add_income(request):
     if request.method == 'POST':
         form = IncomeForm(request.POST)
         if form.is_valid():
-            form.save()
+            income = form.save(commit=False)
+            category_name = form.cleaned_data['category_name']
+            category, _ = Category.objects.get_or_create(name=category_name, user=request.user)
+            income.category = category
+            income.save()
             return redirect('home')
     else:
         form = IncomeForm()
@@ -142,7 +145,11 @@ def add_expense(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         if form.is_valid():
-            form.save()
+            expense = form.save(commit = False)
+            category_name = form.cleaned_data['category_name']
+            category, _ = Category.objects.get_or_create(name=category_name, user=request.user)
+            expense.category = category
+            expense.save()
             return redirect('home')
     else:
         form = ExpenseForm()

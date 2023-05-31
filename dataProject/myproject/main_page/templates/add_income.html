@@ -2,13 +2,31 @@
 <html>
 <head>
     <title>Add Income</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+            <style>
+        body {
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        button[type="submit"] {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>Add Income</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Add</button>
+        {% bootstrap_form form %}
+        <button  type="submit" class="btn btn-primary">Add</button>
     </form>
 </body>
 </html>

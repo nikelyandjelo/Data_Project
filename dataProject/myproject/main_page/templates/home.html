@@ -1,11 +1,32 @@
+<div class="container">
 <h2>Welcome, {{ username }}</h2>
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-<a class = "btn btn-primary " href="{% url 'add_income' %}">Add Income</a>
-<a class = "btn btn-primary " href="{% url 'add_expense' %}">Add Expense</a>
-<a class = "btn btn-primary " href="{% url 'income_list' %}">View my income list</a>
-<a class = "btn btn-primary " href="{% url 'expense_list' %}">View my expense list</a>
 <a class = "btn btn-primary " href="{% url 'logout' %}">Logout</a>
-<a class = "btn btn-primary " href="{% url 'graph_income' %}">Get graph income</a>
-<a class = "btn btn-primary " href="{% url 'graph_expense' %}">Get graph expense</a>
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    Get options
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class = "dropdown-item" href="{% url 'add_income' %}">Add Income</a></li>
+    <li><a class = "dropdown-item" href="{% url 'add_expense' %}">Add Expense</a></li>
+    <li><a class = "dropdown-item" href="{% url 'income_list' %}">View my income list</a></li>
+    <li><a class = "dropdown-item" href="{% url 'expense_list' %}">View my expense list</a></li>
+    <li><a class = "dropdown-item" href="{% url 'graph_income' %}">Get graph income</a></li>
+    <li><a class = "dropdown-item" href="{% url 'graph_expense' %}">Get graph expense</a></li>
+  </ul>
+</div>
+</div>
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .logout-button {
+        align-self: flex-end;
+    }
+</style>
