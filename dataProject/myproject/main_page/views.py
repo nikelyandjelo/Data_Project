@@ -60,13 +60,13 @@ def graph_income(request):
 
 def graph_expense(request):
     expenses = Expense.objects.all()
-    fieldnames = ['date', 'amount', 'currency', 'payment_method','category']
+    fieldnames = ['date', 'amount', 'currency', 'payment_method','category_id']
     csv_filename = convert_to_csv(expenses, fieldnames)
 
     df = pd.read_csv(csv_filename)
 
     #hist for category
-    fig = plot_histogram(df,'category') 
+    fig = plot_histogram(df,'category_id') 
     graph_filename = os.path.join('static', f'expense_category_histogram.png')
     plt.savefig(graph_filename)
     plt.close(fig)
@@ -86,11 +86,26 @@ def graph_expense(request):
     plt.tight_layout()
     plt.close(fig)
 
+    #pie chart
+    df['amount'] = df['amount'].astype(float)
+    grouped_data = df.groupby('category_id')['amount'].sum()
+    category_ids = grouped_data.index.tolist()
+    amounts = grouped_data.tolist()
+
+    categories = Category.objects.filter(id__in=category_ids)
+    labels = [str(category) for category in categories]
+
+    fig = plot_pie_chart(amounts, labels)
+    graph_filename3 = os.path.join('static', 'expense_equal.png')
+    plt.savefig(graph_filename3)
+    plt.close(fig)
+
     context = {
         'csv_filename': csv_filename,
         'graph_filename': graph_filename,
         'graph_filename1': graph_filename1,
-        'graph_filename2': graph_filename2
+        'graph_filename2': graph_filename2,
+        'graph_filename3': graph_filename3
     }
     return render(request, 'graph_expense.html', context)
 
