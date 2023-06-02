@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .graph import plot_histogram, line_graph, plot_pie_chart, chart_bar
 from .models import Income, Expense, Category
-from .forms import IncomeForm, ExpenseForm
+from .forms import IncomeForm, ExpenseForm, process_category
 import matplotlib.pyplot as plt
 import pandas as pd
 import csv
@@ -115,7 +115,7 @@ def home_view(request):
     return render(request, 'home.html', {'username': username})
 
 def income_list(request):
-    incomes = Income.objects.all()
+    incomes = Income.objects.filter(user=request.user)
     categories = Category.objects.filter(income__in=incomes).distinct()
     if request.method == 'POST' and 'delete' in request.POST:
         income_id =request.POST.get('delete')
@@ -146,11 +146,13 @@ def add_income(request):
     if request.method == 'POST':
         form = IncomeForm(request.POST)
         if form.is_valid():
-            income = form.save(commit=False)
             category_name = form.cleaned_data['category_name']
-            category, _ = Category.objects.get_or_create(name=category_name, user=request.user)
-            income.category = category
-            income.save()
+            custom_category = form.cleaned_data['custom_category']
+            category = process_category(category_name, custom_category, request.user)
+            form.instance.user = request.user
+            form.instance.category = category
+            form.instance.custom_category = custom_category
+            form.save()
             return redirect('income_list')
     else:
         form = IncomeForm()
@@ -160,11 +162,13 @@ def add_expense(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         if form.is_valid():
-            expense = form.save(commit = False)
             category_name = form.cleaned_data['category_name']
-            category, _ = Category.objects.get_or_create(name=category_name, user=request.user)
-            expense.category = category
-            expense.save()
+            custom_category = form.cleaned_data['custom_category']
+            category = process_category(category_name, custom_category, request.user)
+            form.instance.user = request.user
+            form.instance.category = category
+            form.instance.custom_category = custom_category
+            form.save()
             return redirect('expense_list')
     else:
         form = ExpenseForm()
