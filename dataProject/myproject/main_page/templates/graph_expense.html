@@ -3,16 +3,29 @@
 <html>
 <head>
     <title>Expense Graph</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
 <body>
-    <h2>Expense histogram</h2>
-    <img src="{% static 'expense_amount_histogram.png' %}" alt="Expense Amount Histogram">
-    <h2>Expense Bar Chart</h2>
-    <img src="{% static 'expense_bar_chart.png' %}" alt="Expense Bar Chart">
-    <h2>Expense histogram based on Category</h2>
-    <img src="{% static 'expense_category_histogram.png' %}" alt="Expense Category Histogram">
-    <h2>Expense equal</h2>
-    <img src="{% static 'expense_equal.png' %}" alt="Expense equal">
+  <div class="container">
+    <h2 class="text-center">Expense histogram</h2>
+    <div class="text-center">
+      <img src="{% static 'expense_amount_histogram.png' %}" alt="Expense Amount Histogram">
+    </div>
+    <h2 class="text-center">Expense Bar Chart</h2>
+    <div class="text-center">
+      <img src="{% static 'expense_bar_chart.png' %}" alt="Expense Bar Chart">
+    </div>
+    <h2 class="text-center">Expense histogram based on Category</h2>
+    <div class="text-center">
+      <img src="{% static 'expense_category_histogram.png' %}" alt="Expense Category Histogram">
+    </div>
+    <h2 class="text-center">Expense equal</h2>
+    <div class="text-center">
+      <img src="{% static 'expense_equal.png' %}" alt="Expense equal">
+    </div>
+  </div>
 </body>
 </html>
 

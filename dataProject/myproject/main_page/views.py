@@ -151,7 +151,7 @@ def add_income(request):
             category, _ = Category.objects.get_or_create(name=category_name, user=request.user)
             income.category = category
             income.save()
-            return redirect('home')
+            return redirect('income_list')
     else:
         form = IncomeForm()
     return render(request, 'add_income.html', {'form': form})
@@ -165,7 +165,7 @@ def add_expense(request):
             category, _ = Category.objects.get_or_create(name=category_name, user=request.user)
             expense.category = category
             expense.save()
-            return redirect('home')
+            return redirect('expense_list')
     else:
         form = ExpenseForm()
     return render(request, 'add_expense.html', {'form': form})

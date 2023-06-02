@@ -3,11 +3,21 @@
 <html>
 <head>
     <title>Income Graph</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
 <body>
-    <h2>Income Graph</h2>
-    <img src="{% static 'income_graph.png' %}" alt="Income Graph">
-    <h2>Income Graph Equal</h2>
-    <img src="{% static 'income_equal.png' %}" alt="Income Graph">
+ <div class="container">
+    <h2 class="text-center">Income Graph</h2>
+    <div class="text-center">
+      <img src="{% static 'income_graph.png' %}" alt="Income Graph">
+    </div>
+
+    <h2 class="text-center">Income Graph Equal</h2>
+    <div class="text-center">
+      <img src="{% static 'income_equal.png' %}" alt="Income Graph">
+    </div>
+  </div>
 </body>
 </html>
