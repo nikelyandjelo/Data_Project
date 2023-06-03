@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .graph import plot_histogram, line_graph, plot_pie_chart, chart_bar
 from .models import Income, Expense, Category
 from .forms import IncomeForm, ExpenseForm, process_category
+from django.contrib.auth.decorators import login_required
 import matplotlib.pyplot as plt
 import pandas as pd
 import csv
@@ -23,8 +24,9 @@ def convert_to_csv(data, fieldnames):
 
     return filename
 
+@login_required
 def graph_income(request):
-    incomes = Income.objects.all()
+    incomes = Income.objects.filter(user=request.user)
     fieldnames = ['date', 'amount', 'currency', 'category_id'] 
     csv_filename = convert_to_csv(incomes, fieldnames)
 
@@ -57,23 +59,23 @@ def graph_income(request):
         }
     return render(request, 'graph_income.html', context)
 
-
+@login_required
 def graph_expense(request):
-    expenses = Expense.objects.all()
+    expenses = Expense.objects.filter(user=request.user)
     fieldnames = ['date', 'amount', 'currency', 'payment_method','category_id']
     csv_filename = convert_to_csv(expenses, fieldnames)
 
     df = pd.read_csv(csv_filename)
-
-    #hist for category
-    fig = plot_histogram(df,'category_id') 
-    graph_filename = os.path.join('static', f'expense_category_histogram.png')
+    #line
+    fig = line_graph(df, 'date', 'amount')
+   
+    graph_filename = os.path.join('static', 'expense_graph.png')
     plt.savefig(graph_filename)
     plt.close(fig)
 
     #hist for amount
     fig = plot_histogram(df, 'amount')
-    graph_filename1 = os.path.join('static', f'expense_amount_histogram.png')
+    graph_filename1 = os.path.join('static', 'expense_amount_histogram.png')
     plt.savefig(graph_filename1)
     plt.tight_layout()
     plt.close(fig)
@@ -109,11 +111,12 @@ def graph_expense(request):
     }
     return render(request, 'graph_expense.html', context)
 
-
+@login_required
 def home_view(request):
     username = request.user.username
     return render(request, 'home.html', {'username': username})
 
+@login_required
 def income_list(request):
     incomes = Income.objects.filter(user=request.user)
     categories = Category.objects.filter(income__in=incomes).distinct()
@@ -121,6 +124,9 @@ def income_list(request):
         income_id =request.POST.get('delete')
         income = Income.objects.get(id=income_id)
         income.delete()
+        category_id =request.POST.get('delete')
+        category = Category.objects.get(id=category_id)
+        category.delete() 
         return redirect('income_list')
     context = {
         'incomes': incomes,
@@ -128,13 +134,17 @@ def income_list(request):
     }
     return render(request, 'income_list.html',context)
 
+@login_required
 def expense_list(request):
-    expenses = Expense.objects.all()
-    categories = Category.objects.filter(expense__in=expenses).distinct()
+    expenses = Expense.objects.filter(user=request.user)
+    categories = Category.objects.filter(expense__in = expenses).distinct()
     if request.method == 'POST' and 'delete' in request.POST:
-        expense_id =request.POST.get('delete')
+        expense_id = request.POST.get('delete')
         expense = Expense.objects.get(id=expense_id)
         expense.delete()
+        category_id =request.POST.get('delete')
+        category = Category.objects.get(id=category_id)
+        category.delete() 
         return redirect('expense_list')
     context = {
         'expenses': expenses,
@@ -142,9 +152,10 @@ def expense_list(request):
     }
     return render(request, 'expense_list.html', context)
 
+@login_required
 def add_income(request):
     if request.method == 'POST':
-        form = IncomeForm(request.POST)
+        form = IncomeForm(request.POST,user=request.user)
         if form.is_valid():
             category_name = form.cleaned_data['category_name']
             custom_category = form.cleaned_data['custom_category']
@@ -155,12 +166,13 @@ def add_income(request):
             form.save()
             return redirect('income_list')
     else:
-        form = IncomeForm()
+        form = IncomeForm(user = request.user)
     return render(request, 'add_income.html', {'form': form})
 
+@login_required
 def add_expense(request):
     if request.method == 'POST':
-        form = ExpenseForm(request.POST)
+        form = ExpenseForm(request.POST, user = request.user)
         if form.is_valid():
             category_name = form.cleaned_data['category_name']
             custom_category = form.cleaned_data['custom_category']
@@ -171,5 +183,5 @@ def add_expense(request):
             form.save()
             return redirect('expense_list')
     else:
-        form = ExpenseForm()
+        form = ExpenseForm(user=request.user)
     return render(request, 'add_expense.html', {'form': form})

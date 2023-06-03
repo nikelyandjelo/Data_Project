@@ -1,3 +1,5 @@
-date,amount,currency,payment_method,category_id
-2022-10-28,35000.00,USD,Credit Card,2
-2023-01-01,50000.00,USD,Bank Transfer,4
+date,amount,currency,category_id
+2022-10-28,3500.00,USD,1
+2022-09-02,1200.00,USD,5
+2022-11-10,120.00,USD,5
+2022-12-12,1230.00,USD,8
