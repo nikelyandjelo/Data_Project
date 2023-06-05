@@ -1,8 +1,26 @@
-  <h2>Register</h2>
+  <h2>Register here</h2>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        body {
+            padding: 20px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        </style>
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
+    {% bootstrap_form form %}
+    <button type="submit" class = "btn btn-primary ">Register</button>
     <a class = "btn btn-primary " href="{% url 'login' %}">Already have an account?</a>
   </form>
 

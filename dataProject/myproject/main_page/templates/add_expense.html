@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Expense</title>
+    <h1 class="text-center">Add your expense here</h1>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
@@ -28,8 +28,7 @@
     </style>
 </head>
 <body>
-    <h1>Add Expense</h1>
-    <form method="post">
+        <form method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
         <div class="button-group">

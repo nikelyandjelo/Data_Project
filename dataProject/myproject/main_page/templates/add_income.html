@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add your income here</title>
+    <h1 class="text-center">Add your income here</h1>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
@@ -28,7 +28,6 @@
     </style>
 </head>
 <body>
-    <h1>Add Income</h1>
     <form method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
