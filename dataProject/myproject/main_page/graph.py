@@ -21,7 +21,7 @@ def line_graph(data, x_field, y_field):
 
     return fig
 
-def plot_pie_chart(data, labels):
+def pie_chart(data, labels):
     fig, ax = plt.subplots(figsize=(6, 6))
 
     ax.pie(data, labels=labels, autopct='%1.1f%%')

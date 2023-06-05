@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .graph import plot_histogram, line_graph, plot_pie_chart, chart_bar
+from .graph import plot_histogram, line_graph, pie_chart, chart_bar
 from .models import Income, Expense, Category
 from .forms import IncomeForm, ExpenseForm, process_category
 from django.contrib.auth.decorators import login_required
@@ -47,7 +47,7 @@ def graph_income(request):
     categories = Category.objects.filter(id__in=category_ids)
     labels = [str(category) for category in categories]
 
-    fig = plot_pie_chart(amounts, labels)
+    fig = pie_chart(amounts, labels)
     graph_filename2 = os.path.join('static', 'income_equal.png')
     plt.savefig(graph_filename2)
     plt.close(fig)
@@ -97,7 +97,7 @@ def graph_expense(request):
     categories = Category.objects.filter(id__in=category_ids)
     labels = [str(category) for category in categories]
 
-    fig = plot_pie_chart(amounts, labels)
+    fig = pie_chart(amounts, labels)
     graph_filename3 = os.path.join('static', 'expense_equal.png')
     plt.savefig(graph_filename3)
     plt.close(fig)
