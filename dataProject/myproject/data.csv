@@ -1,5 +1,2 @@
-date,amount,currency,category_id
-2022-09-02,1200.00,USD,5
-2023-05-05,3400.00,USD,16
-2023-04-04,2300.00,USD,19
-2023-03-03,2300.00,USD,19
+date,amount,currency,payment_method,category_id
+2022-02-02,2340.00,USD,Cash,13

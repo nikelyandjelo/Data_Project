@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 def plot_histogram(data, field):
     fig, ax = plt.subplots(figsize=(6, 6))
@@ -38,3 +39,11 @@ def chart_bar(data):
     ax.set_title(f'{data.name.capitalize()} Bar Chart')
 
     return fig
+
+def compare(data, x, y):
+    fig, ax = plt.subplots(figsize=(6, 6))
+    sns.barplot(data=data, x=x, y=y, ax=ax)
+    ax.set_xlabel(x.capitalize())
+    ax.set_ylabel(y.capitalize())
+    ax.set_title(f'{y.capitalize()} vs {x.capitalize()}')
+    return fig 

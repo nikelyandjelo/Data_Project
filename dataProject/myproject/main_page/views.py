@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
-from .graph import plot_histogram, line_graph, pie_chart, chart_bar
+from .graph import plot_histogram, line_graph, pie_chart, chart_bar, compare
 from .models import Income, Expense, Category
 from .forms import IncomeForm, ExpenseForm, process_category
 from django.contrib.auth.decorators import login_required
 import matplotlib.pyplot as plt
 import pandas as pd
+from io import StringIO
 import csv
 import os 
 
@@ -23,6 +24,16 @@ def convert_to_csv(data, fieldnames):
             })
 
     return filename
+
+def convert_set_to_csv(queryset, fieldnames):
+    output = StringIO()
+    writer = csv.DictWriter(output, fieldnames=fieldnames)
+    writer.writeheader()
+    for obj in queryset:
+        row = {field: getattr(obj, field) for field in fieldnames}
+        writer.writerow(row)
+    return output.getvalue()
+
 
 @login_required
 def graph_income(request):
@@ -118,6 +129,33 @@ def graph_expense(request):
         'graph_filename3': graph_filename3
     }
     return render(request, 'graph_expense.html', context)
+
+@login_required
+def compare_income_expense(request):
+    incomes = Income.objects.filter(user=request.user)
+    fieldnames = ['date', 'amount', 'currency', 'category_id'] 
+    csv_data1 = convert_set_to_csv(incomes, fieldnames)
+
+    expenses = Expense.objects.filter(user=request.user)
+    fieldnames = ['date', 'amount', 'currency', 'payment_method','category_id']
+    csv_data2 = convert_set_to_csv(expenses, fieldnames)
+
+    df1 = pd.read_csv(StringIO(csv_data1))
+    df2 = pd.read_csv(StringIO(csv_data2))
+    income_sum = df1['amount'].sum()
+    expense_sum = df2['amount'].sum()
+    print(income_sum)
+    print(expense_sum)
+    # combined_df = pd.concat([income_sum, expense_sum])
+    data = {'Type': ['Income', 'Expense'], 'Amount': [income_sum, expense_sum]}
+    df = pd.DataFrame(data)
+    fig = compare(data=df, x='Type', y='Amount') 
+    graph_filename = os.path.join('static', 'compare.png')
+    plt.savefig(graph_filename)
+    plt.close(fig)
+    context = {'graph_filename': graph_filename}
+    return render(request, 'compare.html', context)
+
 
 @login_required
 def home_view(request):
