@@ -52,10 +52,18 @@ def graph_income(request):
     plt.savefig(graph_filename2)
     plt.close(fig)
 
+    #chart_bar for currency
+    currency_counts = df['currency'].value_counts()
+    fig = chart_bar(currency_counts)
+    graph_filename3 = os.path.join('static', 'income_bar_chart.png')
+    plt.savefig(graph_filename3)
+    plt.close(fig)
+
     context = {
             'csv_filename': csv_filename, 
             'graph_filename': graph_filename,
-            'graph_filename2': graph_filename2
+            'graph_filename2': graph_filename2,
+            'graph_filename3': graph_filename3
         }
     return render(request, 'graph_income.html', context)
 

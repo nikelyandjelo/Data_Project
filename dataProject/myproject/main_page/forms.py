@@ -24,15 +24,7 @@ class IncomeForm(forms.ModelForm):
         super(IncomeForm, self).__init__(*args, **kwargs)
         # if request.user:
         #     self.fields['custom_category'].widgets.choices = []
-
-    def save(self, commit=True):
-        category_name = self.cleaned_data.get('category_name')
-        custom_category = self.cleaned_data.get('custom_category')
-        category = process_category(category_name, custom_category, self.instance.user)
-        self.instance.category = category
-        self.instance.custom_category = custom_category
-        return super().save(commit = commit)
-
+        
 class ExpenseForm(forms.ModelForm):
     category_name = forms.ChoiceField(choices = CATEGORY_CHOICES_EXPENSE)
     custom_category = forms.CharField(max_length = 50, required = False)
@@ -47,10 +39,3 @@ class ExpenseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(ExpenseForm, self).__init__(*args, **kwargs)
-
-    def save(self, commit = True):
-        category_name = self.cleaned_data.get('category_name')
-        custom_category = self.cleaned_data.get('custom_category')
-        category = process_category(category_name, custom_category, self.instance.user)
-        self.instance.category = category
-        return super().save(commit = commit)
