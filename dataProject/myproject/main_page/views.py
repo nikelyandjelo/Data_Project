@@ -102,7 +102,7 @@ def graph_income(request):
     ax.set_ylabel('Month')
     ax.set_title('Income Heatmap')
     ax.invert_yaxis()
-    
+
     graph_filename4 = 'static/heatmap.png'
     plt.savefig(graph_filename4)
     plt.close(fig)
@@ -161,12 +161,33 @@ def graph_expense(request):
     plt.savefig(graph_filename3)
     plt.close(fig)
 
+    #heatmap
+    df['date'] = pd.to_datetime(df['date']) 
+    df['month'] = df['date'].dt.month 
+    df['year'] = df['date'].dt.year  
+    df_grouped = df.groupby(['year', 'month'])['amount'].sum().reset_index()
+
+    df_pivot = df_grouped.pivot('month', 'year', 'amount')
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+    sns.heatmap(data=df_pivot, annot=True, fmt=".1f", cmap='viridis', ax=ax)
+
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Month')
+    ax.set_title('Expense Heatmap')
+    ax.invert_yaxis()
+    
+    graph_filename4 = 'static/heatmap_expense.png'
+    plt.savefig(graph_filename4)
+    plt.close(fig)
+
     context = {
         'csv_filename': csv_filename,
         'graph_filename': graph_filename,
         'graph_filename1': graph_filename1,
         'graph_filename2': graph_filename2,
-        'graph_filename3': graph_filename3
+        'graph_filename3': graph_filename3,
+        'graph_filename4': graph_filename4
     }
 
     return render(request, 'graph_expense.html', context)
