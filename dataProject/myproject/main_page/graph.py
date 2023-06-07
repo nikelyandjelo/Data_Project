@@ -53,14 +53,3 @@ def compare(data, x, y):
     ax.set_title(f'{y.capitalize()} vs {x.capitalize()}')
 
     return fig
-
-
-def heatmap(data, x, y):
-    fig, ax = plt.subplots(figsize=(8, 6))
-
-    sns.heatmap(data=data, x=x, y=y, ax=ax)
-    ax.set_xlabel(x.capitalize())
-    ax.set_ylabel(y.capitalize())
-    ax.set_title(f'{y.capitalize()} vs {x.capitalize()}')
-
-    return fig
