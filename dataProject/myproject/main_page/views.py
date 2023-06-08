@@ -1,5 +1,4 @@
 from io import StringIO
-import csv
 import os
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -8,48 +7,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import IncomeForm, ExpenseForm
 from .graph import plot_histogram, line_graph, pie_chart, chart_bar, compare
+from .utils import convert_set_to_csv, convert_to_csv, process_category
 from .models import Income, Expense, Category
-
-
-def convert_to_csv(data, fieldnames):
-    filename = 'data.csv'
-
-    with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-        writer.writeheader()
-
-        for item in data:
-            writer.writerow({
-                fieldname: getattr(item, fieldname) for fieldname in fieldnames
-            })
-
-    return filename
-
-
-def convert_set_to_csv(queryset, fieldnames):
-    output = StringIO()
-    writer = csv.DictWriter(output, fieldnames=fieldnames)
-    writer.writeheader()
-
-    for obj in queryset:
-        row = {field: getattr(obj, field) for field in fieldnames}
-        writer.writerow(row)
-
-    return output.getvalue()
-
-
-def process_category(category_name, custom_category, user):
-    category = None
-
-    if custom_category:
-        category, _ = Category.objects.get_or_create(
-            name=custom_category, user=user)
-    elif category_name:
-        category, _ = Category.objects.get_or_create(
-            name=category_name, user=user)
-
-    return category
 
 
 @login_required
@@ -238,10 +197,13 @@ def income_list(request):
     if request.method == 'POST' and 'delete' in request.POST:
         income_id = request.POST.get('delete')
         income = Income.objects.get(id=income_id)
+        category_id = income.category_id
         income.delete()
-        category_id = request.POST.get('delete')
-        category = Category.objects.get(id=category_id)
-        category.delete()
+
+        if category_id:
+            category = Category.objects.get(id=category_id)
+            category.delete()
+
         return redirect('income_list')
 
     context = {
@@ -259,10 +221,13 @@ def expense_list(request):
     if request.method == 'POST' and 'delete' in request.POST:
         expense_id = request.POST.get('delete')
         expense = Expense.objects.get(id=expense_id)
+        category_id = expense.category_id
         expense.delete()
-        category_id = request.POST.get('delete')
-        category = Category.objects.get(id=category_id)
-        category.delete()
+
+        if category_id:
+            category = Category.objects.get(id=category_id)
+            category.delete()
+            
         return redirect('expense_list')
 
     context = {
@@ -286,7 +251,7 @@ def add_income(request):
             form.instance.category = category
             form.instance.custom_category = custom_category
             form.save()
-            return redirect('income_list')
+            return redirect('add_income')
 
     else:
         form = IncomeForm(user=request.user)
@@ -307,7 +272,7 @@ def add_expense(request):
             form.instance.category = category
             form.instance.custom_category = custom_category
             form.save()
-            return redirect('expense_list')
+            return redirect('add_expense')
 
     else:
         form = ExpenseForm(user=request.user)

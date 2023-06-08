@@ -37,3 +37,8 @@ class ExpenseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         kwargs.pop('user', None)
         super(ExpenseForm, self).__init__(*args, **kwargs)
+
+
+class EmailForm(forms.Form):
+    to = forms.EmailField()
+    comments = forms.CharField(required=False, widget=forms.Textarea)
