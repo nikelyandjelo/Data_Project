@@ -30,7 +30,10 @@ class ExpenseForm(forms.ModelForm):
         model = Expense
         fields = ['date', 'amount', 'currency', 'payment_method']
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'date': forms.DateInput(attrs={'class': 'datepicker', 
+                                           'autocomplete': 'off', 
+                                           'id': 'expense_date'}
+                                    ),
             'custom_category': forms.TextInput(attrs={'autocomplete': 'off'}),
         }
 
@@ -41,4 +44,3 @@ class ExpenseForm(forms.ModelForm):
 
 class EmailForm(forms.Form):
     to = forms.EmailField()
-    comments = forms.CharField(required=False, widget=forms.Textarea)
