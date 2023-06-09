@@ -3,12 +3,45 @@ import os
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+from decouple import config
 from django.shortcuts import render, redirect
+from django.core.mail import EmailMessage
 from django.contrib.auth.decorators import login_required
-from .forms import IncomeForm, ExpenseForm
+from .forms import IncomeForm, ExpenseForm, EmailForm
 from .graph import plot_histogram, line_graph, pie_chart, chart_bar, compare
 from .utils import convert_set_to_csv, convert_to_csv, process_category
 from .models import Income, Expense, Category
+
+
+def send_email(request):
+    if request.method == "POST":
+        form = EmailForm(request.POST)
+
+        if form.is_valid():
+            recipient_email = form.cleaned_data["to"]
+            incomes = Income.objects.filter(user=request.user)
+            fieldnames = ['date', 'amount', 'currency']
+            csv_data1 = convert_set_to_csv(incomes, fieldnames)
+
+            expenses = Expense.objects.filter(user=request.user)
+            fieldnames = ['date', 'amount', 'currency', 'payment_method']
+            csv_data2 = convert_set_to_csv(expenses, fieldnames)
+
+            email = EmailMessage(
+                "Financial report",
+                "Hello,\n\nHere is yours financial report.",
+                config('EMAIL_HOST_USER')  , 
+                [recipient_email], 
+            )
+            email.attach("income_report.csv", csv_data1, "text/csv")
+            email.attach("expense_report.csv", csv_data2, "text/csv")
+
+            email.send()
+
+            return redirect('home')
+    else:
+        form = EmailForm()
+    return render(request, "email_form.html", {"form": form})
 
 
 @login_required
@@ -227,7 +260,7 @@ def expense_list(request):
         if category_id:
             category = Category.objects.get(id=category_id)
             category.delete()
-            
+
         return redirect('expense_list')
 
     context = {
