@@ -23,3 +23,9 @@ Financial Data Analysis:
 Categorization of Income and Expenses:
 - Users can create custom categories to classify their income and expenses.
 - Users can choose from predefined categories or create new categories according to their needs.
+
+Email Sending:
+- Users can request to receive financial reports via email.
+- Upon request, the system generates a report containing income and expense data.
+- The report is attached as a CSV file in the email.
+- Users receive the email with the financial report at the specified email address.
