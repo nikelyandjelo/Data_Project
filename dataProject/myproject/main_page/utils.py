@@ -42,4 +42,3 @@ def process_category(category_name, custom_category, user):
             name=category_name, user=user)
 
     return category
-    

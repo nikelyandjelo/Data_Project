@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send financial report</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        body {
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .button-group button {
+            margin: 0 5px;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="text-center">Send financial report to your email here</h1>
+    <form method="post" action="{% url 'email_form' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_to" class="form-label">To:</label>
+            <input type="email" class="form-control" id="id_to" name="to" required>
+        </div>
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+    </form>
+</body>
+</html>

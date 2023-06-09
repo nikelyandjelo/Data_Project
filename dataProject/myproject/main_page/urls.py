@@ -17,5 +17,6 @@ urlpatterns = [
     path('graph_income/', views.graph_income, name='graph_income'),
     path('graph_expense/', views.graph_expense, name='graph_expense'),
     path('compare/', views.compare_income_expense, name='compare'),
+    path('send_email/', views.send_email, name='email_form'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
