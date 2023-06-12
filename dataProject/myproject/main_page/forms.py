@@ -13,9 +13,8 @@ class IncomeForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'class': 'datepicker', 
                                            'autocomplete': 'off', 
                                            'id': 'income_date'}
-                                    ),
-            'custom_category': forms.TextInput(attrs={'autocomplete': 'off'}),
-        }
+                                    )
+                }
 
     def __init__(self, *args, **kwargs):
         kwargs.pop('user', None)
@@ -33,9 +32,8 @@ class ExpenseForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'class': 'datepicker', 
                                            'autocomplete': 'off', 
                                            'id': 'expense_date'}
-                                    ),
-            'custom_category': forms.TextInput(attrs={'autocomplete': 'off'}),
-        }
+                                    )
+                }
 
     def __init__(self, *args, **kwargs):
         kwargs.pop('user', None)
