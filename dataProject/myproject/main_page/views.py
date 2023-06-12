@@ -29,7 +29,7 @@ def send_email(request):
 
             email = EmailMessage(
                 "Financial report",
-                "Hello,\n\nHere is yours financial report.",
+                "Hello,\n\nHere is your financial report.",
                 config('EMAIL_HOST_USER')  , 
                 [recipient_email], 
             )
@@ -230,13 +230,7 @@ def income_list(request):
     if request.method == 'POST' and 'delete' in request.POST:
         income_id = request.POST.get('delete')
         income = Income.objects.get(id=income_id)
-        category_id = income.category_id
         income.delete()
-
-        if category_id:
-            category = Category.objects.get(id=category_id)
-            category.delete()
-
         return redirect('income_list')
 
     context = {
@@ -249,18 +243,12 @@ def income_list(request):
 @login_required
 def expense_list(request):
     expenses = Expense.objects.filter(user=request.user)
-    categories = Category.objects.filter(expense__in=expenses).distinct()
+    categories = Category.objects.filter(expense__in=expenses)
 
     if request.method == 'POST' and 'delete' in request.POST:
         expense_id = request.POST.get('delete')
         expense = Expense.objects.get(id=expense_id)
-        category_id = expense.category_id
         expense.delete()
-
-        if category_id:
-            category = Category.objects.get(id=category_id)
-            category.delete()
-
         return redirect('expense_list')
 
     context = {
